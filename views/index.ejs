@@ -65,44 +65,67 @@
           });
       });      
     });     
-    */     
-  </script> 
-  <script> 
+    */
+  </script>
+  <script>
     /* 앵귤러 어플리케이션 내에서 로직을 작성하려면 
-    컨트롤러로 사용한다. */  
-    
+    컨트롤러로 사용한다. */
+
     //제어하고픈 어플리케이션!!
-    var app=angular.module("profileApp", []);
+    var app = angular.module("profileApp", []);
 
     //현재 사용중인 컨트롤러 내에서만 사용되는 범위를 지정
     //하는 변수 scope
-    app.controller("profileController",function($scope,$http){
+    app.controller("profileController", function ($scope, $http) {
       //$http  란 ? 앵귤러가 지원하는 비동기 ajax 객체
 
-      $scope.regist=function(){
+      $scope.regist = function () {
         //alert("나 불럿어?");          
         $http({
-          url:"/profile/regist",
-          method:"post",
-          data:JSON.stringify({
-            name:$scope.name,
-            age:$scope.age,
-            job:$scope.job
+          url: "/profile/regist",
+          method: "post",
+          data: JSON.stringify({
+            name: $scope.name,
+            age: $scope.age,
+            job: $scope.job
           })
-        }).then(function(success){
-            if(success.data.result==1){
-              //목록을 1칸 증가시키자!!  
-              var profile=new Profile($scope.name,$scope.age,$scope.job);
-              
-              angular.element("#box").append(profile.ul);
-            }
-        } , function(error){
-            alert(error.data.msg);
+        }).then(function (success) {
+          if (success.data.result == 1) {
+            alert("방금 등록한 프로플의 아이디는 "+success.data.profile_id);
+            //목록을 1칸 증가시키자!!  
+            var profile = new Profile($scope.name, $scope.age, $scope.job);
+
+            angular.element("#box").append(profile.ul);
+          }
+        }, function (error) {
+          alert(error.data.msg);
         });
-      }              
+      }
+
+      $scope.del = function (profile_id) {
+        alert(profile_id);
+
+        if (confirm("삭제하시겠습니까?")) {
+          $http({
+            url:"",
+            method:"get",
+            data:JSON.stringify({
+              profile_id:profile_id  
+            })
+          }).then(function(){
+
+          }, function(){
+
+          });
+        }
+      }
+
     });
-    
-    function getDetail(obj){
+
+
+
+
+    function getDetail(obj) {
       //상세보기 영역에 데이터 채우기
       $("#name2").val(obj[0]);
       $("#age2").val(obj[1]);
@@ -114,27 +137,28 @@
 <body ng-app="profileApp" ng-controller="profileController">
   <div class="wrapper">
     <div class="input_area">
-      <input type="text" placeholder="이름 입력" ng-model="name"/>
-      <input type="text" placeholder="나이 입력" ng-model="age"/>
-      <input type="text" placeholder="직업 입력" ng-model="job"/>
-      <input type="button" value="등록" ng-click="regist()"/>
+      <input type="text" placeholder="이름 입력" ng-model="name" />
+      <input type="text" placeholder="나이 입력" ng-model="age" />
+      <input type="text" placeholder="직업 입력" ng-model="job" />
+      <input type="button" value="등록" ng-click="regist()" />
     </div>
     <div class="list_area" id="box">
-      
-      <ul class="list_style">        
+
+      <ul class="list_style">
         <li>이름</li>
         <li>나이</li>
         <li>직업</li>
-      </ul>     
-   
+      </ul>
+
 
     </div>
     <div class="detail_area">
-        <input type="text" id="name2" ng-model="name2"/>
-        <input type="text" id="age2"  ng-model="age2"/>
-        <input type="text" id="job2"  ng-model="job2"/>
-        <input type="button" value="삭제" ng-click="del()"/>
-        <input type="button" value="수정" ng-click="edit()"/>
+      <input type="hidden" id="profile_id" ng-model="profile_id"/>
+      <input type="text" id="name2" ng-model="name2" />
+      <input type="text" id="age2" ng-model="age2" />
+      <input type="text" id="job2" ng-model="job2" />
+      <input type="button" value="삭제" ng-click="del(profile_id)" />
+      <input type="button" value="수정" ng-click="edit()" />
     </div>
   </div>
 

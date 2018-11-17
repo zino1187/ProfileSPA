@@ -1,20 +1,20 @@
 var express = require('express');
-var oracledb=require("oracledb");
+var oracledb = require("oracledb");
 var router = express.Router();
 
 var pool;//접속객체 모여 있는 풀...
-oracledb.autoCommit=true;
+oracledb.autoCommit = true;
 
 //커넥션풀 객체 생성...
 oracledb.createPool({
-  user:"ng",
-  password:"ng",
-  connectString:"localhost/XE"
-} , function(error, connectionPool){
-  if(error){
+  user: "ng",
+  password: "ng",
+  connectString: "localhost/XE"
+}, function (error, connectionPool) {
+  if (error) {
     console.log(error);
-  }else{
-      pool=connectionPool;
+  } else {
+    pool = connectionPool;
   }
 });
 
@@ -31,43 +31,57 @@ router.post('/profile/regist', function (request, response, next) {
   //post : request.body  
   //get: request.query
   console.log(request.body);
-  
-  var name=request.body.name;
-  var age=request.body.age;
-  var job=request.body.job;
 
-  oracledb.getConnection(pool, function(err, con){
-    if(err){
+  var name = request.body.name;
+  var age = request.body.age;
+  var job = request.body.job;
+
+  oracledb.getConnection(pool, function (err, con) {
+    if (err) {
       console.log(err);
-    }else{
-      var sql="insert into profile(profile_id, name,age,job)";
-      sql+=" values(seq_profile.nextval,:name,:age,:job)";
-      
-      con.execute(sql, [name,age,job], function(e, result){
-        if(e){
+    } else {
+      var sql = "insert into profile(profile_id, name,age,job)";
+      sql += " values(seq_profile.nextval,:name,:age,:job)";
+
+      con.execute(sql, [name, age, job], function (e, result) {
+        if (e) {
           console.log(e);
           //에러났다고 알려주자!!, 방식은 json으로...
-          response.writeHead(500,{"Content-Type":"text/json"});
+          response.writeHead(500, { "Content-Type": "text/json" });
           response.end(JSON.stringify({
-            result:0,
-            msg:"ㅠㅠ"            
+            result: 0,
+            msg: "ㅠㅠ"
           }));
-          
-        }else{
-          console.log("입력성공");  
 
-          response.writeHead(200,{"Content-Type":"text/json"});
-          response.end(JSON.stringify({
-            result:1,
-            msg:"^_^"            
-          }));
+        } else {
+          console.log("입력성공");
+
+          //방금 insert 된 sequence 가져오기 (without mybatis)
+          sql = "select seq_profile.currval as profile_id from dual";
+          con.execute(sql, function (eerr, result, fields) {
+            if (eerr) {
+              console.log(eerr);
+            } else {
+              console.log(result);
+              
+              response.writeHead(200, { "Content-Type": "text/json" });
+              response.end(JSON.stringify({
+                result: 1,
+                msg: "^_^",
+                profile_id: result.rows[0]
+              }));
+            }
+            con.close(function(er){
+              if(er)console.log(er);
+            });
+          });
+
 
         }
-        con.close(function(er){
-          if(er)console.log(er);
-        });
+        
+        
       });
-    }   
+    }
   });
 
 });
