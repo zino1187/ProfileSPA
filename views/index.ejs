@@ -20,14 +20,12 @@
     }
     .list_area{
       width:60%;
-      height:100%;
-      background:pink;
+      height:100%;      
       float:left;
     }
     .detail_area{
       width:20%;
       height:100%;
-      background:green;
       float:left;
     }
 
@@ -80,6 +78,7 @@
     //하는 변수 scope
     app.controller("profileController",function($scope,$http){
       //$http  란 ? 앵귤러가 지원하는 비동기 ajax 객체
+
       $scope.regist=function(){
         //alert("나 불럿어?");          
         $http({
@@ -93,7 +92,7 @@
         }).then(function(success){
             if(success.data.result==1){
               //목록을 1칸 증가시키자!!  
-              var profile=new Profile("호랑이",3,"사냥");
+              var profile=new Profile($scope.name,$scope.age,$scope.job);
               
               angular.element("#box").append(profile.ul);
             }
@@ -103,6 +102,12 @@
       }              
     });
     
+    function getDetail(obj){
+      //상세보기 영역에 데이터 채우기
+      $("#name2").val(obj[0]);
+      $("#age2").val(obj[1]);
+      $("#job2").val(obj[2]);
+    }
   </script>
 </head>
 
@@ -124,7 +129,13 @@
    
 
     </div>
-    <div class="detail_area"></div>
+    <div class="detail_area">
+        <input type="text" id="name2" ng-model="name2"/>
+        <input type="text" id="age2"  ng-model="age2"/>
+        <input type="text" id="job2"  ng-model="job2"/>
+        <input type="button" value="삭제" ng-click="del()"/>
+        <input type="button" value="수정" ng-click="edit()"/>
+    </div>
   </div>
 
 </body>
