@@ -47,6 +47,7 @@
   </style>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+  <script src="/javascripts/Profile.js"></script>
   <script>
     /*     
     $(function(){ //문서가 로드가 되면...
@@ -92,6 +93,9 @@
         }).then(function(success){
             if(success.data.result==1){
               //목록을 1칸 증가시키자!!  
+              var profile=new Profile("호랑이",3,"사냥");
+              
+              angular.element("#box").append(profile.ul);
             }
         } , function(error){
             alert(error.data.msg);
@@ -110,7 +114,7 @@
       <input type="text" placeholder="직업 입력" ng-model="job"/>
       <input type="button" value="등록" ng-click="regist()"/>
     </div>
-    <div class="list_area">
+    <div class="list_area" id="box">
       
       <ul class="list_style">        
         <li>이름</li>

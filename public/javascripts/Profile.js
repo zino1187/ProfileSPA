@@ -7,12 +7,24 @@ class Profile{
         this.age=age;
         this.job=job;
 
+        this.arr=[
+            this.name,
+            this.age,
+            this.job
+        ];
         //디자인 관련 변수 
         this.ul;
 
         //코드로 ul 세트를 정의 
         this.ul=document.createElement("ul");
-        var li=document.createElement("li");
-        li.innerText=
+        
+        for(var i=0;i<this.arr.length;i++){
+            var li=document.createElement("li");
+            li.innerText=this.arr[i];
+            li.style.display="inline-block";
+            li.style.width="30%";
+            li.style.lineHeight="30px";
+            this.ul.appendChild(li);
+        }                
     }    
 }
