@@ -36,6 +36,14 @@
       font-size:24px;
       margin-top:10px;
     }
+    .list_style{
+      background:yellow;      
+    }
+    .list_style li{
+      display:inline-block;
+      width:30%;
+      line-height:30px;
+    }
   </style>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
@@ -82,7 +90,9 @@
             job:$scope.job
           })
         }).then(function(success){
-            alert(success.data.msg);
+            if(success.data.result==1){
+              //목록을 1칸 증가시키자!!  
+            }
         } , function(error){
             alert(error.data.msg);
         });
@@ -100,7 +110,16 @@
       <input type="text" placeholder="직업 입력" ng-model="job"/>
       <input type="button" value="등록" ng-click="regist()"/>
     </div>
-    <div class="list_area"></div>
+    <div class="list_area">
+      
+      <ul class="list_style">        
+        <li>이름</li>
+        <li>나이</li>
+        <li>직업</li>
+      </ul>     
+   
+
+    </div>
     <div class="detail_area"></div>
   </div>
 
