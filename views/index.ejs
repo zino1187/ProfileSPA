@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>프로필 관리 어플리케이션(SPA)</title>
+  <style>
+    .wrapper {
+      width: 100%;
+      height:600px;
+      overflow: hidden;
+    }
+    .input_area{
+      width:20%;
+      height:100%;
+      background:yellow;
+      float:left;
+    }
+    .list_area{
+      width:60%;
+      height:100%;
+      background:pink;
+      float:left;
+    }
+    .detail_area{
+      width:20%;
+      height:100%;
+      background:green;
+      float:left;
+    }
+
+    .input_area input{
+      width:90%;
+      font-size:24px;
+      margin-top:10px;
+    }
+  </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+  <script>
+    /*     
+    $(function(){ //문서가 로드가 되면...
+      $(".input_area input[type=button]").click(function(){
+          //비동기 전송!!
+          $.ajax({
+            url:"/profile/regist",
+            type:"post",
+            data:{
+              name:"batman",
+              age:23,
+              job:"개발자"
+            },
+            success:function(result){
+              alert("서버에서 온 응답"+ result);                
+            }              
+          });
+      });      
+    });     
+    */     
+  </script> 
+  <script> 
+    /* 앵귤러 어플리케이션 내에서 로직을 작성하려면 
+    컨트롤러로 사용한다. */  
+    
+    //제어하고픈 어플리케이션!!
+    var app=angular.module("profileApp", []);
+
+    //현재 사용중인 컨트롤러 내에서만 사용되는 범위를 지정
+    //하는 변수 scope
+    app.controller("profileController",function($scope,$http){
+      //$http  란 ? 앵귤러가 지원하는 비동기 ajax 객체
+      $scope.regist=function(){
+        //alert("나 불럿어?");          
+        $http({
+          url:"/profile/regist",
+          method:"post",
+          data:JSON.stringify({
+            name:$scope.name,
+            age:$scope.age,
+            job:$scope.job
+          })
+        }).then(function(success){
+
+        } , function(error){
+
+        });
+      }              
+    });
+    
+  </script>
+</head>
+
+<body ng-app="profileApp" ng-controller="profileController">
+  <div class="wrapper">
+    <div class="input_area">
+      <input type="text" placeholder="이름 입력" ng-model="name"/>
+      <input type="text" placeholder="나이 입력" ng-model="age"/>
+      <input type="text" placeholder="직업 입력" ng-model="job"/>
+      <input type="button" value="등록" ng-click="regist()"/>
+    </div>
+    <div class="list_area"></div>
+    <div class="detail_area"></div>
+  </div>
+
+</body>
+
+</html>
