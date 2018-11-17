@@ -1,13 +1,14 @@
 /* 1사람에 대한 프로필 정보를 표현할 클래스 정의 */
 class Profile{
-    constructor(name,age,job){
+    constructor(profile_id,name,age,job){
         //데이터 즉 속성관련
-        this.profile_id;
+        this.profile_id=profile_id;
         this.name=name;
         this.age=age;
         this.job=job;
 
         this.arr=[
+            this.profile_id,
             this.name,
             this.age,
             this.job
@@ -23,7 +24,7 @@ class Profile{
             getDetail(this.arr);
         });
 
-        for(var i=0;i<this.arr.length;i++){
+        for(var i=1;i<this.arr.length;i++){
             var li=document.createElement("li");
             li.innerText=this.arr[i];
             li.style.display="inline-block";

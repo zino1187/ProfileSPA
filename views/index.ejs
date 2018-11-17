@@ -93,7 +93,7 @@
           if (success.data.result == 1) {
             alert("방금 등록한 프로플의 아이디는 "+success.data.profile_id);
             //목록을 1칸 증가시키자!!  
-            var profile = new Profile($scope.name, $scope.age, $scope.job);
+            var profile = new Profile(success.data.profile_id,$scope.name, $scope.age, $scope.job);
 
             angular.element("#box").append(profile.ul);
           }
@@ -102,20 +102,18 @@
         });
       }
 
-      $scope.del = function (profile_id) {
-        alert(profile_id);
-
+      $scope.del = function() {
         if (confirm("삭제하시겠습니까?")) {
           $http({
-            url:"",
+            url:"/profile/del",
             method:"get",
-            data:JSON.stringify({
-              profile_id:profile_id  
-            })
-          }).then(function(){
-
-          }, function(){
-
+            params:{
+              profile_id:angular.element("#profile_id").val()  
+            }
+          }).then(function(success){
+            alert(success.data.result);
+          }, function(error){
+            alert(error.data.msg);
           });
         }
       }
@@ -123,13 +121,12 @@
     });
 
 
-
-
     function getDetail(obj) {
       //상세보기 영역에 데이터 채우기
-      $("#name2").val(obj[0]);
-      $("#age2").val(obj[1]);
-      $("#job2").val(obj[2]);
+      $("#profile_id").val(obj[0]);//hidden에 값 채우기
+      $("#name2").val(obj[1]);
+      $("#age2").val(obj[2]);
+      $("#job2").val(obj[3]);
     }
   </script>
 </head>
@@ -153,11 +150,11 @@
 
     </div>
     <div class="detail_area">
-      <input type="hidden" id="profile_id" ng-model="profile_id"/>
+      <input type="hidden" id="profile_id"/>
       <input type="text" id="name2" ng-model="name2" />
       <input type="text" id="age2" ng-model="age2" />
       <input type="text" id="job2" ng-model="job2" />
-      <input type="button" value="삭제" ng-click="del(profile_id)" />
+      <input type="button" value="삭제" ng-click="del()" />
       <input type="button" value="수정" ng-click="edit()" />
     </div>
   </div>

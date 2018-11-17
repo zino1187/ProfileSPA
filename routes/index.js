@@ -86,6 +86,43 @@ router.post('/profile/regist', function (request, response, next) {
 
 });
 
+//삭제요청 처리
+router.get('/profile/del', function (request, response, next) {
+  //get방식의 파라미터 받기!!
+  console.log(request.query);
+  var profile_id=request.query.profile_id;
 
+  oracledb.getConnection(pool, function(error, con){
+    if(error){
+      console.log(error);
+    }else{
+      var sql="delete profile where profile_id=:profile_id";  
+      con.execute(sql,[profile_id], function(err,result){
+        if(err){
+          console.log(err);
+        }else{
+           console.log(result);   
+           if(result.rowsAffected==0){
+              response.writeHead(500,{"Content-Type":"text/json"});
+              response.end(JSON.stringify({
+                result:0,
+                msg:"삭제실패"
+              }));
+           }else{
+            response.writeHead(200,{"Content-Type":"text/json"});
+            response.end(JSON.stringify({
+              result:1,
+              msg:"삭제성공"
+            }));
+           }
+        }
+        con.close(function(er){
+          if(er)console.log(er);
+        });
+      });    
+    }
+  });
+  
+});
 
 module.exports = router;
