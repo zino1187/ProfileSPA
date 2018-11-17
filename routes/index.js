@@ -46,8 +46,22 @@ router.post('/profile/regist', function (request, response, next) {
       con.execute(sql, [name,age,job], function(e, result){
         if(e){
           console.log(e);
+          //에러났다고 알려주자!!, 방식은 json으로...
+          response.writeHead(500,{"Content-Type":"text/json"});
+          response.end(JSON.stringify({
+            result:0,
+            msg:"ㅠㅠ"            
+          }));
+          
         }else{
           console.log("입력성공");  
+
+          response.writeHead(200,{"Content-Type":"text/json"});
+          response.end(JSON.stringify({
+            result:1,
+            msg:"^_^"            
+          }));
+
         }
         con.close(function(er){
           if(er)console.log(er);

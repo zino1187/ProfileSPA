@@ -82,9 +82,9 @@
             job:$scope.job
           })
         }).then(function(success){
-
+            alert(success.data.msg);
         } , function(error){
-
+            alert(error.data.msg);
         });
       }              
     });
