@@ -24,6 +24,34 @@ router.get('/', function (req, res, next) {
   res.render('index');
 });
 
+/* 목록 요청 처리 */
+router.get('/profile/list', function (request, response, next) {
+  console.log("목록을 원해?");   
+  oracledb.getConnection(pool, function(error,con){
+    if(error){
+      console.log(error);
+    }else{
+      var sql="select * from profile";
+      con.execute(sql, function(err, result, fields){
+        if(err){
+          console.log(err);
+        } else{
+            console.log(result);
+            response.writeHead(200,{"Content-Type":"text/json"});
+            response.end(JSON.stringify({
+              records:result.rows
+            }));
+        } 
+        con.close(function(er){
+          if(er)console.log(er);
+        });  
+      });
+    }
+  });     
+});
+
+
+
 /* 등록요청 page. */
 router.post('/profile/regist', function (request, response, next) {
   //클라이언트가 전송한 데이터를 받아보자!! 

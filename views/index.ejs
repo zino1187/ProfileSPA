@@ -78,6 +78,18 @@
     //하는 변수 scope
     app.controller("profileController", function ($scope, $http) {
       //$http  란 ? 앵귤러가 지원하는 비동기 ajax 객체
+      
+      $scope.list=function(){
+        $http({
+          url:"/profile/list",
+          method:"get"
+        }).then(function(success){
+          alert(success.data.records.length);
+        },function(error){
+
+        });
+      }
+      $scope.list();
 
       $scope.regist = function () {
         //alert("나 불럿어?");          
@@ -117,7 +129,6 @@
           });
         }
       }
-
     });
 
 
